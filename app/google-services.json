@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "782467461007",
+    "firebase_url": "https://limitls-android.firebaseio.com",
+    "project_id": "limitls-android",
+    "storage_bucket": "limitls-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782467461007:android:cc6f92d45c25f523",
+        "android_client_info": {
+          "package_name": "com.example.tmejs.limitlles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782467461007-4177kp13lrsea4lh4ho0dp70t030j3re.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tmejs.limitlles",
+            "certificate_hash": "4f331c02372e92c0d286c5a922134a9ce8bf3afe"
+          }
+        },
+        {
+          "client_id": "782467461007-hlafg3qt2h9jl0v399ngb91ojo6d1b1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPpckJn0JLQyF3teZPAiOz4y1XeMT0Bmk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782467461007-hlafg3qt2h9jl0v399ngb91ojo6d1b1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
