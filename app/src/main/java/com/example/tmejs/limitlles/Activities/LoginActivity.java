@@ -1,4 +1,4 @@
-package com.example.tmejs.limitlles;
+package com.example.tmejs.limitlles.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,6 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.tmejs.limitlles.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +55,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
+     */    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -192,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -298,6 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private Integer userID;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -310,6 +312,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
+
+                userID = 1;
+
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
@@ -333,6 +338,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                //Save logedIDDAta
+                MainActivity.Context().setUserID(userID);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
