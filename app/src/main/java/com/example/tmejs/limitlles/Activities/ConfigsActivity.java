@@ -30,21 +30,21 @@ public class ConfigsActivity extends AppCompatActivity {
 
 
     private List<FlightConfig> loadConfigs(Integer userID){
-        return RestConnectionUtil.getFlightConfigsByUserID(userID);
+        return new ArrayList<>();
     }
 
-    private void fillData(List<FlightConfig> dataList){
+    private void fillData(final List<FlightConfig> dataList){
 
         ListView listView = (ListView) findViewById(R.id.configs_list_view);
 
+        dataList.add(new FlightConfig());
+        dataList.add(new FlightConfig("ToSydney",2,"","Physically disabled",false,true));
         List<String> aa=new ArrayList<>();
         for (FlightConfig ff:dataList) {
             aa.add(ff.configName);
         }
 
-        for(Integer a=0;a<10;a++){
-            aa.add(aa.toString()+"c onfigName");
-        }
+
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -59,7 +59,7 @@ public class ConfigsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Zbieramy id
                 //switchToFlightDetails(dataList.get(position));
-                switchToConfigFlightDetails(new FlightConfig());
+                switchToConfigFlightDetails(dataList.get(position));
             }
         });
 

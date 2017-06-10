@@ -30,7 +30,7 @@ public class FlightsActivity extends AppCompatActivity {
 
     public List<Flight> loadFlights(Integer userID){
 
-        return RestConnectionUtil.getFlightsByUserID(userID);
+        return new ArrayList<>();
 
     }
 
@@ -42,9 +42,8 @@ public class FlightsActivity extends AppCompatActivity {
         for (Flight ff:dataList) {
             aa.add(ff.name);
         }
-        for(Integer a=0;a<10;a++){
-            aa.add(aa.toString());
-        }
+        Flight newFl=new Flight();
+        aa.add(newFl.flightNum);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,

@@ -7,17 +7,20 @@ import java.io.Serializable;
  */
 
 public class Flight implements Serializable {
-    public String name ="name";
-    public String flightNum="flightNum";
-    public String dateFrom="dateFrom";
-    public String dateTo="dateTo";
-    public String flightFrom="flightFrom";
-    public String flightTo="flightTo";
+    public Integer flightId = 1;
+    public String name = "name";
+    public String flightNum = "FR4734";
+    public String dateFrom = "12/02/2017 13:00";
+    public String dateTo = "12/02/2017 16:00";
+    public String flightFrom = "Gdansk";
+    public String flightTo = "London(Stansted)";
 
     public Flight(){
 
     }
-    public Flight(String name, String flightNum, String dateFrom, String dateTo, String flightFrom, String flightTo) {
+
+    public Flight(Integer flightId, String name, String flightNum, String dateFrom, String dateTo, String flightFrom, String flightTo) {
+        this.flightId = flightId;
         this.name = name;
         this.flightNum = flightNum;
         this.dateFrom = dateFrom;

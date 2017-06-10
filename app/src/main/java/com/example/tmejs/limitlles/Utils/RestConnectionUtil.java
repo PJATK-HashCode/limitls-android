@@ -1,7 +1,5 @@
 package com.example.tmejs.limitlles.Utils;
 
-import android.net.http.HttpResponseCache;
-
 import com.example.tmejs.limitlles.Structures.Flight;
 import com.example.tmejs.limitlles.Structures.FlightConfig;
 
@@ -11,10 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +22,11 @@ import java.util.Map;
 
 public class RestConnectionUtil  {
 
-    private final static String REST_URL="REST_URL";
+    private final static String REST_URL="https://radiant-stream-52142.herokuapp.com/";
+
+    public interface IOnResponse {
+         void onResponse(String json);
+    }
 
     private enum LOG_ACTIVITY{
         IM_HERE,
@@ -35,7 +35,7 @@ public class RestConnectionUtil  {
     }
 
 
-    private static String createJSon(HashMap<String,String> hm) {
+    private static String createJSon(HashMap<String,String> hm, LOG_ACTIVITY enumACT) {
         JSONObject jsonString = new JSONObject();
 
         for (Map.Entry<String,String> entry:hm.entrySet()) {
@@ -45,12 +45,51 @@ public class RestConnectionUtil  {
 
             }
         };
+        try {
+            jsonString.put("ENUM", enumACT.toString());
+        }catch(Exception e) {
 
+        }
         return jsonString.toString();
 
     }
 
-    private static void createRequest() throws IOException{
+
+
+    //Feature
+private static HashMap<String,String> parse(String json){
+
+    return new HashMap<>();
+}
+
+
+    private static String getDataFromRest(String restString){
+        String restConnectionString = REST_URL + restString;
+
+        try{
+            URL url = new URL(REST_URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuffer jsonString = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                jsonString.append(line);
+            }
+            br.close();
+            connection.disconnect();
+            return jsonString.toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static void createRequest(HashMap<String,String> hm,LOG_ACTIVITY enump,IOnResponse onResponse){
         try{
         URL url = new URL(REST_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -61,7 +100,7 @@ public class RestConnectionUtil  {
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
-        writer.write(createJSon(null));
+        writer.write(createJSon(hm,enump));
         writer.close();
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuffer jsonString = new StringBuffer();
@@ -71,6 +110,7 @@ public class RestConnectionUtil  {
         }
         br.close();
         connection.disconnect();
+            onResponse.onResponse(jsonString.toString());
     } catch (Exception e) {
         throw new RuntimeException(e.getMessage());
     }
@@ -78,22 +118,54 @@ public class RestConnectionUtil  {
     }
 
 
+    public static void sendImRequest(Integer userId,Integer idLot){
+        HashMap<String,String> values=new HashMap<>();
+        values.put("user_id",userId.toString());
+        values.put("id_lot",idLot.toString());
+        createRequest(values, LOG_ACTIVITY.IM_HERE, new IOnResponse() {
+            @Override
+            public void onResponse(String json) {
+            }
+        });
+    }
 
+    public static void sendIWillBeRequest(Integer userID,Integer lotId, String minPlus){
+        HashMap<String,String> values=new HashMap<>();
+        values.put("user_id",userID.toString());
+        values.put("id_lot",lotId.toString());
+        values.put("date",minPlus.toString());
+        createRequest(values, LOG_ACTIVITY.WILL_BE_AT, new IOnResponse() {
+            @Override
+            public void onResponse(String json) {
+            }
+        });
+    }
 
-    //TODO
-    public static List<Flight> getFlightsByUserID(Integer userId){
+    public static void sendDeclineRequest(Integer userId, Integer id_lot){
+        HashMap<String,String> values=new HashMap<>();
+        values.put("user_id",userId.toString());
+        values.put("id_lot",id_lot.toString());
+        createRequest(values, LOG_ACTIVITY.DECLINE, new IOnResponse() {
+            @Override
+            public void onResponse(String json) {
+            }
+        });
+    }
 
-
-        return new ArrayList<Flight>();
+    public static void getFlightsByUserID(Integer userId, IOnResponse resp){
+        String restString = "/rest/client/" + userId;
+        resp.onResponse(getDataFromRest(restString));
     }
 
 
-    public static List<FlightConfig> getFlightConfigsByUserID(Integer userId){
-        return new ArrayList<>();
+    public static void getFlightConfigsByUserID(Integer userId, IOnResponse resp){
+        String restString = "/rest/flight/" + userId;
+        resp.onResponse(getDataFromRest(restString));
     }
 
-    public static FlightConfig getConfigByID(int id){
-        return new FlightConfig();
+    public static void getConfigByID(Integer id, IOnResponse resp){
+        String restString = "/rest/flightconfig/" + id;
+        resp.onResponse(getDataFromRest(restString));
     }
 
 
@@ -102,5 +174,5 @@ public class RestConnectionUtil  {
 
 
 
-    
+
 }
